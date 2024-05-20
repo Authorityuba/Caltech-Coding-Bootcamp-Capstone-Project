@@ -1,0 +1,70 @@
+package com.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.entity.Orders;
+import com.service.OrderService;
+
+import jakarta.ws.rs.core.MediaType;
+
+@RestController
+@RequestMapping("orders")
+@CrossOrigin
+public class OrderController {
+	
+	@Autowired
+	OrderService orderService;
+	
+	@GetMapping(value="viewallorders")
+	public List<Orders> viewAllOrderDetails(){
+		return orderService.viewAllOrders();
+	}
+	
+	@GetMapping(value="findorderinfo{oid}")
+	public Orders findOrderInfo(@RequestParam("oid") int oid) {
+		return orderService.findOrderById(oid);
+	}
+
+	@PostMapping(value="placeorder",consumes= MediaType.APPLICATION_JSON)
+	public String placeOrder(@RequestBody Orders orders) {
+		return orderService.placeOrder(orders);
+	}
+	
+	@PatchMapping(value="updateorder",consumes= MediaType.APPLICATION_JSON)
+	public String updateOrder(@RequestBody Orders orders) {
+		return orderService.updateOrder(orders);
+	}
+	
+	@DeleteMapping(value="deleteorder/{oid}")
+	public String deleteOrder(@PathVariable int oid) {
+		return orderService.deleteOrder(oid);
+	}
+	
+	@GetMapping(value="findorder/{oid}")
+	public List<Object> findByOrder(@PathVariable int oid){
+		return orderService.findByOrder(oid);
+	}
+	
+	@GetMapping(value="viewmyorder/{oid}")
+	public List<java.util.Map<String, Object>> findMyOrders(@PathVariable int oid){
+		return orderService.findMyOrders(oid);
+	}
+	
+	@GetMapping(value="viewcustomerorder/{oid}")
+	public List<java.util.Map<String, Object>> findCustomerOrder(@PathVariable int oid){
+		return orderService.findCustomerOrder(oid);
+	}
+
+}
